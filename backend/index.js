@@ -1,11 +1,12 @@
-const express = require('express');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
-const port = 3000;
+const port = 8001;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+app.listen(port);
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.post("/fancyficate", async (req, res) => {
+  //code
+  res.status(200).json({ result: "test test" });
 });
