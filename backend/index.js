@@ -7,6 +7,7 @@ const port = 8001;
 app.listen(port);
 
 let dictionary = [
+  //nouns
   { word: "Thou", synonyms: ["You"] },
   { word: "thou", synonyms: ["you"] },
   { word: "Thine", synonyms: ["Your"] },
@@ -174,6 +175,41 @@ let dictionary = [
   { word: "a maxim", synonyms: ["a saying"] },
   { word: "The maxim", synonyms: ["The saying"] },
   { word: "the maxim", synonyms: ["the saying"] },
+  //adjectives/verbes
+  { word: "pulchritudinous", synonyms: ["beautiful"] },
+  {
+    word: "frivolous",
+    synonyms: [
+      "giddy",
+      "silly",
+      "foolish",
+      "facetious",
+      "zany",
+      "lighthearted",
+      "merry",
+      "superficial",
+      "shallow",
+      "lacking seriousness",
+      "nonserious",
+      "light-minded",
+      "whimsical",
+      "skittish",
+      "flighty",
+      "irresponsible",
+      "thoughtless",
+      "lacking in sense",
+      "featherbrained",
+      "empty-headed",
+      "peabrained",
+      "birdbrained",
+      "vacuous",
+      "vapid",
+      "dizzy",
+      "dippy",
+      "dopey",
+      "nutty",
+    ],
+  },
 ];
 
 app.post("/fancyficate", async (req, res) => {
