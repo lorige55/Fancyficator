@@ -210,6 +210,32 @@ let dictionary = [
       "nutty",
     ],
   },
+  { word: "afternoonified", synonyms: ["smart", "refined", "sophisticated"] },
+  { word: "arf'arf'an'arf", synonyms: ["intoxicated"] },
+  {
+    word: "Anon",
+    synonyms: [
+      "Soon",
+      "Shortly",
+      "In a little while",
+      "In a short time",
+      "Presently",
+      "Before long",
+      "In the near future",
+    ],
+  },
+  {
+    word: "anon",
+    synonyms: [
+      "soon",
+      "shortly",
+      "in a little while",
+      "in a short time",
+      "presently",
+      "before long",
+      "in the near future",
+    ],
+  },
 ];
 
 app.post("/fancyficate", async (req, res) => {
