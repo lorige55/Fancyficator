@@ -5,33 +5,15 @@ const app = express();
 const port = 8001;
 
 app.listen(port);
+app.use(express.json());
 
 let dictionary = [
   //nouns
-  { word: "Thou", synonyms: ["You"] },
   { word: "thou", synonyms: ["you"] },
-  { word: "Thine", synonyms: ["Your"] },
   { word: "thine", synonyms: ["your"] },
-  { word: "Thyself", synonyms: ["Yourself"] },
   { word: "thyself", synonyms: ["yourself"] },
-  { word: "Aught", synonyms: ["Anything", "Zero"] },
   { word: "aught", synonyms: ["anything", "zero"] },
   { word: "thrice", synonyms: ["three times", "3 times"] },
-  { word: "Thrice", synonyms: ["Three times"] },
-  {
-    word: "Influx",
-    synonyms: [
-      "Inflow",
-      "Inrush",
-      "Rush",
-      "Stream",
-      "Flood",
-      "Incursion",
-      "Ingress",
-      "Invasion",
-      "Intrusion",
-    ],
-  },
   {
     word: "influx",
     synonyms: [
@@ -44,38 +26,6 @@ let dictionary = [
       "ingress",
       "invasion",
       "intrusion",
-    ],
-  },
-  {
-    word: "Paraphernailia",
-    synonyms: [
-      "Equipment",
-      "Stuff",
-      "Things",
-      "Apparatus",
-      "Tackle",
-      "Kit",
-      "Implements",
-      "Tools",
-      "Utensils",
-      "Material",
-      "Materials",
-      "Appliances",
-      "Rig",
-      "Outfit",
-      "Accoutrements",
-      "Appurtenances",
-      "Impedimenta",
-      "Miscellaneous articles",
-      "Odds and ends",
-      "Bits and pieces",
-      "Bits and bobs",
-      "Trappings",
-      "Accessories",
-      "Rubbish",
-      "Gear",
-      "Junk",
-      "Traps",
     ],
   },
   {
@@ -111,17 +61,6 @@ let dictionary = [
     ],
   },
   {
-    word: "Zenith",
-    synonyms: [
-      "Highest point",
-      "High point",
-      "Crowning point",
-      "Peak",
-      "Maximum",
-      "Prime",
-    ],
-  },
-  {
     word: "zenith",
     synonyms: [
       "highest point",
@@ -130,25 +69,6 @@ let dictionary = [
       "peak",
       "maximum",
       "prime",
-    ],
-  },
-  {
-    word: "Myriads of",
-    synonyms: [
-      "Multitude of",
-      "Countless",
-      "Innumerable",
-      "Numerous",
-      "A large number of",
-      "A great number of",
-      "A lot of",
-      "Loads of",
-      "Tons of",
-      "Hundreds of",
-      "Thousands of",
-      "Millions of",
-      "Billions of",
-      "Zillions of",
     ],
   },
   {
@@ -171,9 +91,7 @@ let dictionary = [
     ],
   },
   { word: "maxim", synonyms: ["saying", "motto", "slogan"] },
-  { word: "A maxim", synonyms: ["A saying"] },
   { word: "a maxim", synonyms: ["a saying"] },
-  { word: "The maxim", synonyms: ["The saying"] },
   { word: "the maxim", synonyms: ["the saying"] },
   //adjectives/verbes
   { word: "pulchritudinous", synonyms: ["beautiful"] },
@@ -213,18 +131,6 @@ let dictionary = [
   { word: "afternoonified", synonyms: ["smart", "refined", "sophisticated"] },
   { word: "arf'arf'an'arf", synonyms: ["intoxicated"] },
   {
-    word: "Anon",
-    synonyms: [
-      "Soon",
-      "Shortly",
-      "In a little while",
-      "In a short time",
-      "Presently",
-      "Before long",
-      "In the near future",
-    ],
-  },
-  {
     word: "anon",
     synonyms: [
       "soon",
@@ -239,6 +145,20 @@ let dictionary = [
 ];
 
 app.post("/fancyficate", async (req, res) => {
-  //code
-  res.status(200).json({ result: "test test" });
+  let { text } = req.body;
+  let backup = text;
+  let changed = [];
+
+  for (a in dictionary) {
+    for (b in dictionary[a].synonyms) {
+      text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
+
+      if (text !== backup) {
+        changed.push(dictionary[a].synonyms[b], dictionary[a].word);
+        backup = text;
+      }
+    }
+  }
+
+  res.status(200).json({ result: text });
 });

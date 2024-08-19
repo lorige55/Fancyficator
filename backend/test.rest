@@ -2,5 +2,5 @@ POST http://localhost:8001/fancyficate
 Content-Type: application/json
 
   {
-    "text": "example"
+    "text": "This is a beautiful day."
   }
