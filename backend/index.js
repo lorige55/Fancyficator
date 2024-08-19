@@ -144,6 +144,18 @@ let dictionary = [
   },
 ];
 
+for (item in dictionary) {
+  let a = JSON.parse(JSON.stringify(dictionary[item]));
+  a.word = a.word.charAt(0).toUpperCase() + a.word.slice(1);
+  for (b in a.synonyms) {
+    a.synonyms[b] =
+      a.synonyms[b].charAt(0).toUpperCase() + a.synonyms[b].slice(1);
+  }
+  dictionary.push(a);
+}
+
+console.log("Server added capitalized words to dictionary.");
+
 app.post("/fancyficate", async (req, res) => {
   let { text } = req.body;
   let backup = text;
