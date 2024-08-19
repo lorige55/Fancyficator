@@ -19,7 +19,21 @@ export default {
     //
   },
   methods: {
-    //
+    fancyficate() {
+      fetch("http://localhost:8001/fancyficate", {
+        method: "POST",
+        body: JSON.stringify({
+          text: this.text,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.text = data.result;
+        });
+    },
   },
 };
 </script>
@@ -28,7 +42,7 @@ export default {
   <div class="grid h-screen place-items-center">
     <div class="grid w-full gap-2 w-2/3">
       <Textarea v-model="text" placeholder="Type your text here." />
-      <Button>Fancyficate</Button>
+      <Button @click="fancyficate()">Fancyficate</Button>
     </div>
   </div>
 </template>

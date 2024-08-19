@@ -6,6 +6,7 @@ const port = 8001;
 
 app.listen(port);
 app.use(express.json());
+app.use(cors());
 
 let dictionary = [
   //nouns
