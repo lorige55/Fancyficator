@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const port = 8001;
+const OpenAI = require("openai");
+const openai = new OpenAI();
 
 app.listen(port);
 app.use(express.json());
@@ -171,6 +173,33 @@ app.post("/fancyficate", async (req, res) => {
         backup = text;
       }
     }
+  }
+
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "system",
+        content:
+          "ONLY grammatically correct the use of words. ONLY Return “Null” if everything’s correct. Else ONLY return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
+      },
+      {
+        role: "user",
+        content: `'${text}'`,
+      },
+    ],
+  });
+
+  if (completion.choices[0].message.content === "Null") {
+    res.status(200).json({ result: text });
+    return;
+  }
+
+  let incorrect = new Array(completion.choices[0].message.content);
+
+  for (let i = 0; i < incorrect.length; ) {
+    text = text.replace(incorrect[i], incorrect[i + 1]);
+    i += 2;
   }
 
   res.status(200).json({ result: text });
