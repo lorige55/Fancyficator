@@ -353,6 +353,56 @@ let dictionary = [
       "apt to get",
     ],
   },
+  {
+    word: "myriad",
+    synonyms: [
+      "innumerable",
+      "countless",
+      "infinite",
+      "numberless",
+      "unlimited",
+      "untold",
+      "limitless",
+      "unnumbered",
+      "immeasurable",
+      "multitudinous",
+      "numerous",
+      "manifold",
+      "multiple",
+      "legion",
+      "several",
+      "many",
+      "various",
+      "sundry",
+      "diverse",
+      "multifarious",
+    ],
+  },
+  {
+    word: "succinct",
+    synonyms: [
+      "innumerable",
+      "countless",
+      "infinite",
+      "numberless",
+      "unlimited",
+      "untold",
+      "limitless",
+      "unnumbered",
+      "immeasurable",
+      "multitudinous",
+      "numerous",
+      "manifold",
+      "multiple",
+      "legion",
+      "several",
+      "many",
+      "various",
+      "sundry",
+      "diverse",
+      "multifarious",
+    ],
+  },
 ];
 
 for (item in dictionary) {
@@ -370,6 +420,7 @@ console.log("Server added capitalized words to dictionary.");
 app.post("/fancyficate", async (req, res) => {
   let { text } = req.body;
   let backup = text;
+  let changedWords = 0;
   let changed = [];
 
   for (a in dictionary) {
@@ -378,6 +429,7 @@ app.post("/fancyficate", async (req, res) => {
 
       if (text !== backup) {
         changed.push(dictionary[a].synonyms[b], dictionary[a].word);
+        changedWords++;
         backup = text;
       }
     }
@@ -389,7 +441,7 @@ app.post("/fancyficate", async (req, res) => {
       {
         role: "system",
         content:
-          "ONLY grammatically correct the use of words. ONLY Return “Null” if everything’s correct. Else ONLY return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
+          "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
       },
       {
         role: "user",
@@ -398,17 +450,13 @@ app.post("/fancyficate", async (req, res) => {
     ],
   });
 
-  if (completion.choices[0].message.content === "Null") {
-    res.status(200).json({ result: text });
-    return;
+  if (completion.choices[0].message.content !== "Null") {
+    let incorrect = new Array(completion.choices[0].message.content);
+
+    for (let i = 0; i < incorrect.length; ) {
+      text = text.replace(incorrect[i], incorrect[i + 1]);
+      i += 2;
+    }
   }
-
-  let incorrect = new Array(completion.choices[0].message.content);
-
-  for (let i = 0; i < incorrect.length; ) {
-    text = text.replace(incorrect[i], incorrect[i + 1]);
-    i += 2;
-  }
-
-  res.status(200).json({ result: text });
+  res.status(200).json({ result: text, changedWords: changedWords });
 });

@@ -37,6 +37,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.text = data.result;
+          console.log(data.changedWords);
         });
       this.fancyficating = false;
     },
