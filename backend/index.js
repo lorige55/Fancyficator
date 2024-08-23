@@ -317,6 +317,42 @@ let dictionary = [
       "abnormal",
     ],
   },
+  {
+    word: "akin",
+    synonyms: [
+      "similar",
+      "related",
+      "close",
+      "near",
+      "corresponding",
+      "comparable",
+      "parallel",
+      "equivalent",
+      "allied",
+      "connected",
+      "alike",
+      "matching",
+      "analogous",
+      "cognate",
+    ],
+  },
+  {
+    word: "prone",
+    synonyms: [
+      "susceptible",
+      "vulnerable",
+      "liable",
+      "inclined",
+      "given",
+      "subject",
+      "disposed",
+      "predisposed",
+      "open",
+      "likely to have",
+      "likley to get",
+      "apt to get",
+    ],
+  },
 ];
 
 for (item in dictionary) {
