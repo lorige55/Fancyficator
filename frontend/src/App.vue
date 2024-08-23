@@ -14,6 +14,7 @@ export default {
     return {
       text: "",
       fancyficating: false,
+      changed: [],
     };
   },
   mounted() {
@@ -37,7 +38,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.text = data.result;
-          console.log(data.changedWords);
+          this.changed = data.changed;
         });
       this.fancyficating = false;
     },

@@ -468,7 +468,6 @@ console.log("Server added capitalized words to dictionary.");
 app.post("/fancyficate", async (req, res) => {
   let { text } = req.body;
   let backup = text;
-  let changedWords = 0;
   let changed = [];
 
   for (a in dictionary) {
@@ -477,7 +476,6 @@ app.post("/fancyficate", async (req, res) => {
 
       if (text !== backup) {
         changed.push(dictionary[a].synonyms[b], dictionary[a].word);
-        changedWords++;
         backup = text;
       }
     }
@@ -506,5 +504,5 @@ app.post("/fancyficate", async (req, res) => {
       i += 2;
     }
   }
-  res.status(200).json({ result: text, changedWords: changedWords });
+  res.status(200).json({ result: text, changed: changed });
 });
