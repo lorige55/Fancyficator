@@ -822,7 +822,10 @@ app.post("/fancyficate", async (req, res) => {
       text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
 
       if (text !== backup) {
-        changed.push(dictionary[a].synonyms[b], dictionary[a].word);
+        changed.push({
+          word: dictionary[a].word,
+          synonym: dictionary[a].synonyms[b],
+        });
         backup = text;
       }
     }

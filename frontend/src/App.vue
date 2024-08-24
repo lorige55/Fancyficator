@@ -1,7 +1,9 @@
 <script>
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2, Copy } from "lucide-vue-next";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Loader2, Copy, ArrowBigRight } from "lucide-vue-next";
 
 export default {
   components: {
@@ -9,12 +11,15 @@ export default {
     Button,
     Loader2,
     Copy,
+    ScrollArea,
+    Separator,
+    ArrowBigRight,
   },
   data() {
     return {
       text: "",
       fancyficating: false,
-      changed: [],
+      changed: null,
     };
   },
   mounted() {
@@ -70,6 +75,19 @@ export default {
           Please wait
         </Button>
       </div>
+      <ScrollArea class="h-72 w-48 rounded-md border" v-if="changed !== null">
+        <div class="p-4">
+          <h4 class="mb-4 text-sm font-medium leading-none">Changed</h4>
+
+          <div v-for="word in changed">
+            <div class="text-sm">
+              {{ word.synonym }} <ArrowBigRight class="w-4 h-4 inline" />
+              {{ word.word }}
+            </div>
+            <Separator class="my-2" />
+          </div>
+        </div>
+      </ScrollArea>
     </div>
   </div>
 </template>
