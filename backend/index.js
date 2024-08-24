@@ -93,10 +93,28 @@ let dictionary = [
       "zillions of",
     ],
   },
+  {
+    word: "discombobulation",
+    synonyms: ["confusion"],
+  },
   { word: "maxim", synonyms: ["saying", "motto", "slogan"] },
   { word: "a maxim", synonyms: ["a saying"] },
   { word: "the maxim", synonyms: ["the saying"] },
-  //adjectives/verbes
+  //adjectives/adverbs
+  {
+    word: "discombobulating",
+    synonyms: [
+      "confusing",
+      "upsetting",
+      "disturbing",
+      "disconcerting",
+      "disorienting",
+      "rattling",
+      "throwing off",
+      "bewildering",
+      "baffling",
+    ],
+  },
   { word: "pulchritudinous", synonyms: ["beautiful"] },
   {
     word: "frivolous",
@@ -403,6 +421,7 @@ let dictionary = [
       "gnomic",
     ],
   },
+  //verbs
   {
     word: "beckon",
     synonyms: [
@@ -449,6 +468,34 @@ let dictionary = [
       "captivated",
       "persuaded",
       "won over",
+    ],
+  },
+  {
+    word: "discombobulate",
+    synonyms: [
+      "confuse",
+      "upset",
+      "disturb",
+      "disconcert",
+      "disorient",
+      "rattle",
+      "throw off",
+      "bewilder",
+      "baffle",
+    ],
+  },
+  {
+    word: "discombobulated",
+    synonyms: [
+      "confused",
+      "upset",
+      "disturbed",
+      "disconcerted",
+      "disoriented",
+      "rattled",
+      "threw off",
+      "bewildered",
+      "baffled",
     ],
   },
 ];
