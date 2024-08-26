@@ -813,7 +813,7 @@ for (item in dictionary) {
 console.log("Server added capitalized words to dictionary.");
 
 app.post("/fancyficate", async (req, res) => {
-  let { text, vocabulary } = req.body;
+  let { text, vocabulary, spelling } = req.body;
   let backup = text;
   let changed = [];
 
@@ -838,7 +838,7 @@ app.post("/fancyficate", async (req, res) => {
         {
           role: "system",
           content:
-            "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
+            "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like “incorrect”, “correct”, “incorrect”, “correct”.",
         },
         {
           role: "user",
@@ -848,13 +848,41 @@ app.post("/fancyficate", async (req, res) => {
     });
 
     if (completion.choices[0].message.content !== "Null") {
-      let incorrect = new Array(completion.choices[0].message.content);
-
+      let incorrect = completion.choices[0].message.content.split(", ");
       for (let i = 0; i < incorrect.length; ) {
         text = text.replace(incorrect[i], incorrect[i + 1]);
         i += 2;
       }
     }
   }
-  res.status(200).json({ result: text, changed: changed });
+
+  if (spelling) {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Correct the spelling of this text. Return “Null” if everything’s correct. Else return the misspelled word and the corrected word like “misspelled”, “correct”, “misspelled”, “correct”.",
+        },
+        {
+          role: "user",
+          content: `'${text}'`,
+        },
+      ],
+    });
+
+    if (completion.choices[0].message.content !== "Null") {
+      let incorrect = completion.choices[0].message.content.split(", ");
+      console.log(incorrect);
+      for (let i = 0; i < incorrect.length; ) {
+        text = text.replace(incorrect[i], incorrect[i + 1]);
+        i += 2;
+      }
+    }
+  }
+  res.status(200).json({
+    result: text,
+    changed: changed,
+  });
 });

@@ -2,5 +2,7 @@ POST http://localhost:8001/fancyficate
 Content-Type: application/json
 
   {
-    "text": "This is a beautiful day."
+    "text": "This is a lovly beautiful day.",
+    "vocabulary": false,
+    "spelling": true
   }

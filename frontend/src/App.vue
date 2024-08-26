@@ -35,6 +35,7 @@ export default {
       fancyficating: false,
       changed: null,
       vocabulary: true,
+      spelling: false,
     };
   },
   mounted() {
@@ -51,6 +52,7 @@ export default {
         body: JSON.stringify({
           text: this.text,
           vocabulary: this.vocabulary,
+          spelling: this.spelling,
         }),
         headers: {
           "Content-type": "application/json",
@@ -126,6 +128,23 @@ export default {
                   <i>Fancyficate</i> your text with overly posh vocabulary.
                   Wouldn't use it for a real, grades essay for school...
                 </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div class="p-4 flex items-center space-x-2">
+                  <Switch
+                    :checked="spelling"
+                    @click="spelling = !spelling"
+                    id="spelling"
+                  />
+                  <Label for="spelling">Correct spelling</Label>
+                </div></TooltipTrigger
+              >
+              <TooltipContent class="w-full">
+                <p>Correct your miserable spelling. You're welcome.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
