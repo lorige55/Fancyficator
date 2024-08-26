@@ -34,6 +34,7 @@ export default {
       text: "",
       fancyficating: false,
       changed: null,
+      vocabulary: true,
     };
   },
   mounted() {
@@ -49,6 +50,7 @@ export default {
         method: "POST",
         body: JSON.stringify({
           text: this.text,
+          vocabulary: this.vocabulary,
         }),
         headers: {
           "Content-type": "application/json",
@@ -111,7 +113,11 @@ export default {
             <Tooltip>
               <TooltipTrigger>
                 <div class="p-4 flex items-center space-x-2">
-                  <Switch disabled checked id="vocab" />
+                  <Switch
+                    :checked="vocabulary"
+                    @click="vocabulary = !vocabulary"
+                    id="vocab"
+                  />
                   <Label for="vocab">Replace Vocabulary</Label>
                 </div></TooltipTrigger
               >

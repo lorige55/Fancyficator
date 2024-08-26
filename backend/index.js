@@ -813,45 +813,47 @@ for (item in dictionary) {
 console.log("Server added capitalized words to dictionary.");
 
 app.post("/fancyficate", async (req, res) => {
-  let { text } = req.body;
+  let { text, vocabulary } = req.body;
   let backup = text;
   let changed = [];
 
-  for (a in dictionary) {
-    for (b in dictionary[a].synonyms) {
-      text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
+  if (vocabulary) {
+    for (a in dictionary) {
+      for (b in dictionary[a].synonyms) {
+        text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
 
-      if (text !== backup) {
-        changed.push({
-          word: dictionary[a].word,
-          synonym: dictionary[a].synonyms[b],
-        });
-        backup = text;
+        if (text !== backup) {
+          changed.push({
+            word: dictionary[a].word,
+            synonym: dictionary[a].synonyms[b],
+          });
+          backup = text;
+        }
       }
     }
-  }
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
-      },
-      {
-        role: "user",
-        content: `'${text}'`,
-      },
-    ],
-  });
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like [“incorrect”, “correct”, “incorrect”, “correct”]",
+        },
+        {
+          role: "user",
+          content: `'${text}'`,
+        },
+      ],
+    });
 
-  if (completion.choices[0].message.content !== "Null") {
-    let incorrect = new Array(completion.choices[0].message.content);
+    if (completion.choices[0].message.content !== "Null") {
+      let incorrect = new Array(completion.choices[0].message.content);
 
-    for (let i = 0; i < incorrect.length; ) {
-      text = text.replace(incorrect[i], incorrect[i + 1]);
-      i += 2;
+      for (let i = 0; i < incorrect.length; ) {
+        text = text.replace(incorrect[i], incorrect[i + 1]);
+        i += 2;
+      }
     }
   }
   res.status(200).json({ result: text, changed: changed });
