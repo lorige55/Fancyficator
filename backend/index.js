@@ -813,7 +813,7 @@ for (item in dictionary) {
 console.log("Server added capitalized words to dictionary.");
 
 app.post("/fancyficate", async (req, res) => {
-  let { text, vocabulary, spelling } = req.body;
+  let { text, vocabulary, spelling, grammar } = req.body;
   let changed = [];
 
   if (spelling) {
@@ -860,6 +860,37 @@ app.post("/fancyficate", async (req, res) => {
           });
           backup = text;
         }
+      }
+    }
+  }
+
+  if (grammar) {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Correct the grammar. Return “Null” if everything’s correct. Else return the incorrect word/phrase and the corrected version in this syntax: “incorrect”, “correct”, “incorrect”, “correct”.",
+        },
+        {
+          role: "user",
+          content: `'${text}'`,
+        },
+      ],
+    });
+
+    if (completion.choices[0].message.content !== "Null") {
+      let incorrect = completion.choices[0].message.content.split('", "');
+      incorrect = incorrect.map((item) => item.replace(/['"]+/g, ""));
+      for (let i = 0; i < incorrect.length; ) {
+        text = text.replace(incorrect[i], incorrect[i + 1]);
+        changed.push({
+          new: incorrect[i + 1],
+          old: incorrect[i],
+          process: "grammar",
+        });
+        i += 2;
       }
     }
   }

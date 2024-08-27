@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Loader2, Copy, ArrowBigRight } from "lucide-vue-next";
+import { text } from "stream/consumers";
 
 export default {
   components: {
@@ -34,15 +35,44 @@ export default {
       text: "",
       fancyficating: false,
       changed: null,
-      vocabulary: true,
+      vocabulary: false,
       spelling: false,
+      grammar: false,
     };
   },
-  mounted() {
-    //
+  beforeMount() {
+    if (localStorage.getItem("text")) {
+      this.text = localStorage.getItem("text");
+    }
+    if (localStorage.getItem("spelling")) {
+      this.spelling = JSON.parse(localStorage.getItem("spelling"));
+    } else {
+      this.spelling = false;
+    }
+    if (localStorage.getItem("vocab")) {
+      this.vocabulary = JSON.parse(localStorage.getItem("vocab"));
+    } else {
+      this.vocabulary = true;
+    }
+    if (localStorage.getItem("grammar")) {
+      this.grammar = JSON.parse(localStorage.getItem("grammar"));
+    } else {
+      this.grammar = false;
+    }
   },
   watch: {
-    //
+    text: function (a) {
+      localStorage.setItem("text", a);
+    },
+    vocabulary: function (a) {
+      localStorage.setItem("vocab", a);
+    },
+    spelling: function (a) {
+      localStorage.setItem("spelling", a);
+    },
+    grammar: function (a) {
+      localStorage.setItem("grammar", a);
+    },
   },
   methods: {
     async fancyficate() {
@@ -53,6 +83,7 @@ export default {
           text: this.text,
           vocabulary: this.vocabulary,
           spelling: this.spelling,
+          grammar: this.grammar,
         }),
         headers: {
           "Content-type": "application/json",
@@ -100,7 +131,7 @@ export default {
               Please wait
             </Button>
             <Button
-              variant="outline"
+              variant="secondary"
               size="icon"
               class="ml-2 shadow-sm"
               @click="copyText()"
@@ -111,6 +142,23 @@ export default {
         </div>
         <div class="w-96">
           <h4 class="ml-4 text-sm font-medium leading-none">Settings</h4>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div class="p-4 flex items-center space-x-2">
+                  <Switch
+                    :checked="spelling"
+                    @click="spelling = !spelling"
+                    id="spelling"
+                  />
+                  <Label for="spelling">Correct Spelling</Label>
+                </div></TooltipTrigger
+              >
+              <TooltipContent class="w-full">
+                <p>Correct your miserable spelling. You're welcome.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
@@ -136,15 +184,18 @@ export default {
               <TooltipTrigger>
                 <div class="p-4 flex items-center space-x-2">
                   <Switch
-                    :checked="spelling"
-                    @click="spelling = !spelling"
-                    id="spelling"
+                    :checked="grammar"
+                    @click="grammar = !grammar"
+                    id="grammar"
                   />
-                  <Label for="spelling">Correct Spelling</Label>
+                  <Label for="grammar">Correct grammar</Label>
                 </div></TooltipTrigger
               >
-              <TooltipContent class="w-full">
-                <p>Correct your miserable spelling. You're welcome.</p>
+              <TooltipContent class="w-72">
+                <p>
+                  Correct your miserable grammar. You're English Teacher will be
+                  happy.
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
