@@ -814,47 +814,7 @@ console.log("Server added capitalized words to dictionary.");
 
 app.post("/fancyficate", async (req, res) => {
   let { text, vocabulary, spelling } = req.body;
-  let backup = text;
   let changed = [];
-
-  if (vocabulary) {
-    for (a in dictionary) {
-      for (b in dictionary[a].synonyms) {
-        text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
-
-        if (text !== backup) {
-          changed.push({
-            word: dictionary[a].word,
-            synonym: dictionary[a].synonyms[b],
-          });
-          backup = text;
-        }
-      }
-    }
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "Grammatically correct the use of words. Return “Null” if everything’s correct. Else return the incorrect word and the corrected word like “incorrect”, “correct”, “incorrect”, “correct”.",
-        },
-        {
-          role: "user",
-          content: `'${text}'`,
-        },
-      ],
-    });
-
-    if (completion.choices[0].message.content !== "Null") {
-      let incorrect = completion.choices[0].message.content.split(", ");
-      for (let i = 0; i < incorrect.length; ) {
-        text = text.replace(incorrect[i], incorrect[i + 1]);
-        i += 2;
-      }
-    }
-  }
 
   if (spelling) {
     const completion = await openai.chat.completions.create({
@@ -863,7 +823,7 @@ app.post("/fancyficate", async (req, res) => {
         {
           role: "system",
           content:
-            "Correct the spelling of this text. Return “Null” if everything’s correct. Else return the misspelled word and the corrected word like “misspelled”, “correct”, “misspelled”, “correct”.",
+            "Correct the spelling. Return “Null” if everything’s correct. Else return the misspelled word and the corrected word in this syntax: “misspelled”, “correct”, “misspelled”, “correct”.",
         },
         {
           role: "user",
@@ -873,14 +833,37 @@ app.post("/fancyficate", async (req, res) => {
     });
 
     if (completion.choices[0].message.content !== "Null") {
-      let incorrect = completion.choices[0].message.content.split(", ");
-      console.log(incorrect);
+      let incorrect = completion.choices[0].message.content.split('", "');
+      incorrect = incorrect.map((item) => item.replace(/['"]+/g, ""));
       for (let i = 0; i < incorrect.length; ) {
         text = text.replace(incorrect[i], incorrect[i + 1]);
+        changed.push({
+          new: incorrect[i + 1],
+          old: incorrect[i],
+          process: "spelling",
+        });
         i += 2;
       }
     }
   }
+
+  if (vocabulary) {
+    let backup = text;
+    for (a in dictionary) {
+      for (b in dictionary[a].synonyms) {
+        text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
+        if (text !== backup) {
+          changed.push({
+            new: dictionary[a].word,
+            old: dictionary[a].synonyms[b],
+            process: "vocab",
+          });
+          backup = text;
+        }
+      }
+    }
+  }
+
   res.status(200).json({
     result: text,
     changed: changed,

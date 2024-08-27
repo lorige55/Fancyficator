@@ -140,7 +140,7 @@ export default {
                     @click="spelling = !spelling"
                     id="spelling"
                   />
-                  <Label for="spelling">Correct spelling</Label>
+                  <Label for="spelling">Correct Spelling</Label>
                 </div></TooltipTrigger
               >
               <TooltipContent class="w-full">
@@ -152,9 +152,14 @@ export default {
             <div class="p-4">
               <h4 class="mb-4 text-sm font-medium leading-none">Changed</h4>
               <div v-for="word in changed" :key="word.word">
-                <div class="text-sm">
-                  {{ word.synonym }} <ArrowBigRight class="w-4 h-4 inline" />
-                  {{ word.word }}
+                <div class="flex">
+                  <div class="text-sm">
+                    {{ word.old }} <ArrowBigRight class="w-4 h-4 inline" />
+                    {{ word.new }}
+                  </div>
+                  <div class="text-sm font-bold ml-auto">
+                    {{ word.process }}
+                  </div>
                 </div>
                 <Separator class="my-2" />
               </div>
