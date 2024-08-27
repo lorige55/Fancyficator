@@ -12,7 +12,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Loader2, Copy, ArrowBigRight } from "lucide-vue-next";
-import { text } from "stream/consumers";
 
 export default {
   components: {
@@ -188,7 +187,7 @@ export default {
                     @click="grammar = !grammar"
                     id="grammar"
                   />
-                  <Label for="grammar">Correct grammar</Label>
+                  <Label for="grammar">Correct Grammar</Label>
                 </div></TooltipTrigger
               >
               <TooltipContent class="w-72">
