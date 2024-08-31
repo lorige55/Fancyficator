@@ -29,11 +29,12 @@ async function llama3(prompt) {
 async function generateWords() {
   console.log("Generating word");
   let word = await llama3(
-    `Give me one word seen as fancy, posh, or sophisticated. A normal person should not have heared that word before. Just return the word, not anything else. Do NOT capitalize the word.`
+    `Generate a random word that is considered overly fancy, posh, or sophisticated. Ensure that it is uncommon, obscure, and difficult for an average person to understand. Return only the word, without any capitalization, and without any additional text or explanation.`
   );
   console.log("Got word: " + word);
   if (existingWords.includes(word)) {
     console.log("Word already exists, trying again");
+    console.log("----------------------------------------");
     generateWords();
     return;
   }
@@ -70,8 +71,10 @@ async function generateWords() {
     function (err) {
       if (err) throw err;
       console.log("complete");
+      console.log("----------------------------------------");
     }
   );
+  generateWords();
 }
 
 generateWords();
