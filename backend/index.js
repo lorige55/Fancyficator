@@ -71,7 +71,10 @@ app.post("/fancyficate", async (req, res) => {
     let backup = text;
     for (a in dictionary) {
       for (b in dictionary[a].synonyms) {
-        text = text.replace(dictionary[a].synonyms[b], dictionary[a].word);
+        text = text.replace(
+          ` ${dictionary[a].synonyms[b]} `,
+          ` ${dictionary[a].word} `
+        );
         if (text !== backup) {
           changed.push({
             new: dictionary[a].word,
