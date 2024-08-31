@@ -1,3 +1,6 @@
+const axios = require("axios");
+var fs = require("fs");
+
 let dictionary = require("./dictionary.json");
 
 let existingWords = [];
@@ -6,39 +9,69 @@ for (a in dictionary) {
   existingWords.push(dictionary[a].word);
 }
 
-//ollama prompt
-const userAction = async () => {
-  let response = await fetch("http://localhost:11434/api/chat", {
-    method: "POST",
-    body: {
-      model: "llama3:70b",
-      prompt:
-        "Give me words seen as fancy, posh, or sophisticated. A normal person should not have heared that word before. Just return the word, not anything else.",
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const result = await response.json().response;
-  if (existingWords.includes(result)) {
-    userAction();
-  }
-  existingWords.push(result);
-  response = await fetch("http://localhost:11434/api/chat", {
-    method: "POST",
-    body: {
-      model: "llama3:70b",
-      prompt:
-        "Give me as many synonyms as possible for the following word, respond in a syntax of ['synonym', 'synonym', 'synonym']: " +
-        result,
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const synonyms = await response.json().response;
-};
+const OLLAMA_API_URL = "http://localhost:1111";
 
-//check if word is in dictionary
-//if so, ask ollama for list of synonyms, add them to dictionary, push capizalized/adverb version
-//if not, ask for other word,
+async function llama3(prompt) {
+  try {
+    const response = await axios.post(`${OLLAMA_API_URL}/api/generate`, {
+      model: "llama3.1",
+      prompt: prompt,
+      stream: false,
+    });
+    return response.data.response;
+  } catch (error) {
+    console.error("Error communicating with Ollama:", error.message);
+    return null;
+  }
+}
+
+//ollama prompt
+async function generateWords() {
+  console.log("Generating word");
+  let word = await llama3(
+    `Give me one word seen as fancy, posh, or sophisticated. A normal person should not have heared that word before. Just return the word, not anything else. Do NOT capitalize the word.`
+  );
+  console.log("Got word: " + word);
+  if (existingWords.includes(word)) {
+    console.log("Word already exists, trying again");
+    generateWords();
+    return;
+  }
+  existingWords.push(word);
+  console.log("Awaiting synonyms");
+  let synonyms = await llama3(
+    `Give me as many synonyms as possible for the following word: ${word} Respond in this syntax: synonym, synonym, synonym. Use a comma after every synonym, except the last one. Do not capitalize any of the synonyms. Do not respond with anyhting else.`
+  );
+  console.log(synonyms);
+  synonyms = synonyms.split(", ");
+  console.log("Got synonyms: " + synonyms);
+  let nonCapitalized = { word: word, synonyms: synonyms };
+  nonCapitalized.word =
+    nonCapitalized.word.charAt(0).toLowerCase() + nonCapitalized.word.slice(1);
+  for (synonym in nonCapitalized.synonyms) {
+    nonCapitalized.synonyms[synonym] =
+      nonCapitalized.synonyms[synonym].charAt(0).toLowerCase() +
+      nonCapitalized.synonyms[synonym].slice(1);
+  }
+  dictionary.push(nonCapitalized);
+  let capitalized = JSON.parse(JSON.stringify(nonCapitalized));
+  capitalized.word =
+    capitalized.word.charAt(0).toUpperCase() + capitalized.word.slice(1);
+  for (synonym in capitalized.synonyms) {
+    capitalized.synonyms[synonym] =
+      capitalized.synonyms[synonym].charAt(0).toUpperCase() +
+      capitalized.synonyms[synonym].slice(1);
+  }
+  dictionary.push(capitalized);
+  fs.writeFile(
+    "./dictionary.json",
+    JSON.stringify(dictionary),
+    "utf8",
+    function (err) {
+      if (err) throw err;
+      console.log("complete");
+    }
+  );
+}
+
+generateWords();

@@ -1804,5 +1804,81 @@
       "Let someone off with",
       "Let go"
     ]
+  },
+  {
+    "word": "garrulous",
+    "synonyms": [
+      "loquacious",
+      "talkative",
+      "verbose",
+      "chatty",
+      "voluble",
+      "lofy",
+      "windbag",
+      "blabbermouth",
+      "prattler",
+      "chatterbox",
+      "gabby",
+      "yappily",
+      "babbling",
+      "gushing",
+      "effusive",
+      "fluent",
+      "articulate",
+      "vociferous"
+    ]
+  },
+  {
+    "word": "Garrulous",
+    "synonyms": [
+      "Loquacious",
+      "Talkative",
+      "Verbose",
+      "Chatty",
+      "Voluble",
+      "Lofy",
+      "Windbag",
+      "Blabbermouth",
+      "Prattler",
+      "Chatterbox",
+      "Gabby",
+      "Yappily",
+      "Babbling",
+      "Gushing",
+      "Effusive",
+      "Fluent",
+      "Articulate",
+      "Vociferous"
+    ]
+  },
+  {
+    "word": "gallimaufry",
+    "synonyms": [
+      "mishmash",
+      "jumble",
+      "clutter",
+      "medley",
+      "assortment",
+      "mix-up",
+      "mess",
+      "chaos",
+      "confusion",
+      "hodgepodge"
+    ]
+  },
+  {
+    "word": "Gallimaufry",
+    "synonyms": [
+      "Mishmash",
+      "Jumble",
+      "Clutter",
+      "Medley",
+      "Assortment",
+      "Mix-up",
+      "Mess",
+      "Chaos",
+      "Confusion",
+      "Hodgepodge"
+    ]
   }
 ]
